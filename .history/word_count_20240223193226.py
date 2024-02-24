@@ -45,9 +45,6 @@ def mapper(sequence):
     
     for _, text in sequence:
         for word in text.split():
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            word = word.lower()
             tupla = (word, 1)
             new_sequence.append(tupla)
             
@@ -123,6 +120,14 @@ def save_output(output_directory, sequence):
 def create_marker(output_directory):
     with open(os.path.join(output_directory, "_SUCCESS"), "w") as f:
         f.write("")
+
+sequence = load_input("input")
+sequence = mapper(sequence)
+sequence = shuffle_and_sort(sequence)
+sequence = reducer(sequence)
+create_ouptput_directory('output')
+save_output('output', sequence)
+create_marker('output')
 
 #
 # Escriba la función job, la cual orquesta las funciones anteriores.

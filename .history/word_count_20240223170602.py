@@ -28,6 +28,7 @@ def load_input(input_directory):
 
     return sequence
 
+print(load_input("input")[2])
 #
 # Escriba una función llamada maper que recibe una lista de tuplas de la
 # función anterior y retorna una lista de tuplas (clave, valor). En este caso,
@@ -41,17 +42,13 @@ def load_input(input_directory):
 #   ]
 #
 def mapper(sequence):
-    new_sequence = []
-    
-    for _, text in sequence:
-        for word in text.split():
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            word = word.lower()
-            tupla = (word, 1)
-            new_sequence.append(tupla)
-            
+    new_sequence = [
+        (word.lower().replace(".","").replace(",",""), 1)
+        for _, line in sequence
+        for word in line.split()
+        ]
     return new_sequence
+
 
 #
 # Escriba la función shuffle_and_sort que recibe la lista de tuplas entregada
@@ -65,8 +62,12 @@ def mapper(sequence):
 #   ]
 #
 def shuffle_and_sort(sequence):
-    sequence = sorted(sequence, key = lambda x: x[0])
+    sequence = sorted(
+        sequence,
+        key = lambda x: x[0]
+    )
     return sequence
+
 
 #
 # Escriba la función reducer, la cual recibe el resultado de shuffle_and_sort y
@@ -76,20 +77,14 @@ def shuffle_and_sort(sequence):
 #
 def reducer(sequence):
     new_sequence = []
-    diccionario = dict()
-    
-    for key, value in sequence:
-        if key not in diccionario.keys():
-            diccionario[key] = [value]
-        else:
-            diccionario[key].append(value)
-    
-    new_sequence = list()
-    
-    for key, value in diccionario.items():
-        new_sequence.append((key, sum(value)))
-    
+    for k, g in groupby(sequence, lambda x: x[0]):
+        key = k
+        value = sum([x[1] for x in g])
+        new_sequence.append(
+            (key, value)
+        )
     return new_sequence
+
 
 #
 # Escriba la función create_ouptput_directory que recibe un nombre de directorio
@@ -100,8 +95,9 @@ import os.path
 def create_ouptput_directory(output_directory):
 
     if os.path.isdir(output_directory):
-        raise Exception(f"The directory '{output_directory}' already exists.")
-    os.makedirs(output_directory)
+        raise Exception("El directorio ya existe")
+    os.mkdir(output_directory)
+
 
 #
 # Escriba la función save_output, la cual almacena en un archivo de texto llamado
@@ -112,9 +108,11 @@ def create_ouptput_directory(output_directory):
 # separados por un tabulador.
 #
 def save_output(output_directory, sequence):
-    with open(output_directory + "/part 00000", "w") as file:
+    filename = os.path.join(output_directory, "part 00000")
+    with open(filename, "w") as f:
         for key, value in sequence:
-            file.write(f"{key}\t{value}\n")
+            f.write(f"{key}\t{value}\n")
+
 
 #
 # La siguiente función crea un archivo llamado _SUCCESS en el directorio
@@ -123,6 +121,7 @@ def save_output(output_directory, sequence):
 def create_marker(output_directory):
     with open(os.path.join(output_directory, "_SUCCESS"), "w") as f:
         f.write("")
+
 
 #
 # Escriba la función job, la cual orquesta las funciones anteriores.

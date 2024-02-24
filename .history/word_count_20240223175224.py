@@ -45,9 +45,6 @@ def mapper(sequence):
     
     for _, text in sequence:
         for word in text.split():
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            word = word.lower()
             tupla = (word, 1)
             new_sequence.append(tupla)
             
@@ -90,7 +87,10 @@ def reducer(sequence):
         new_sequence.append((key, sum(value)))
     
     return new_sequence
-
+sequence = load_input("input")
+sequence = mapper(sequence)
+sequence = shuffle_and_sort(sequence)
+reducer(sequence)
 #
 # Escriba la función create_ouptput_directory que recibe un nombre de directorio
 # y lo crea. Si el directorio existe, la función falla.
@@ -100,8 +100,9 @@ import os.path
 def create_ouptput_directory(output_directory):
 
     if os.path.isdir(output_directory):
-        raise Exception(f"The directory '{output_directory}' already exists.")
-    os.makedirs(output_directory)
+        raise Exception("El directorio ya existe")
+    os.mkdir(output_directory)
+
 
 #
 # Escriba la función save_output, la cual almacena en un archivo de texto llamado
@@ -112,9 +113,11 @@ def create_ouptput_directory(output_directory):
 # separados por un tabulador.
 #
 def save_output(output_directory, sequence):
-    with open(output_directory + "/part 00000", "w") as file:
+    filename = os.path.join(output_directory, "part 00000")
+    with open(filename, "w") as f:
         for key, value in sequence:
-            file.write(f"{key}\t{value}\n")
+            f.write(f"{key}\t{value}\n")
+
 
 #
 # La siguiente función crea un archivo llamado _SUCCESS en el directorio
@@ -123,6 +126,7 @@ def save_output(output_directory, sequence):
 def create_marker(output_directory):
     with open(os.path.join(output_directory, "_SUCCESS"), "w") as f:
         f.write("")
+
 
 #
 # Escriba la función job, la cual orquesta las funciones anteriores.

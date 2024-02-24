@@ -45,9 +45,6 @@ def mapper(sequence):
     
     for _, text in sequence:
         for word in text.split():
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            word = word.lower()
             tupla = (word, 1)
             new_sequence.append(tupla)
             
@@ -112,9 +109,16 @@ def create_ouptput_directory(output_directory):
 # separados por un tabulador.
 #
 def save_output(output_directory, sequence):
-    with open(output_directory + "/part 00000", "w") as file:
+    with open(output_directory + "part 00000", "w") as file:
         for key, value in sequence:
             file.write(f"{key}\t{value}\n")
+
+sequence = load_input("input")
+sequence = mapper(sequence)
+sequence = shuffle_and_sort(sequence)
+sequence = reducer(sequence)
+create_ouptput_directory('output')
+save_output('output', sequence)
 
 #
 # La siguiente función crea un archivo llamado _SUCCESS en el directorio

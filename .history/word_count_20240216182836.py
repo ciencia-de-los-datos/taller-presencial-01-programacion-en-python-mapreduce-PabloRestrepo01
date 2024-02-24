@@ -13,10 +13,8 @@
 #     ('text2.txt'. 'hypotheses.')
 #   ]
 #
-
 import glob
 import fileinput
-
 def load_input(input_directory):
     
     sequence = []
@@ -27,6 +25,9 @@ def load_input(input_directory):
             sequence.append((fileinput.filename(), line))
 
     return sequence
+
+print(load_input("input"))
+
 
 #
 # Escriba una función llamada maper que recibe una lista de tuplas de la
@@ -41,17 +42,8 @@ def load_input(input_directory):
 #   ]
 #
 def mapper(sequence):
-    new_sequence = []
-    
-    for _, text in sequence:
-        for word in text.split():
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            word = word.lower()
-            tupla = (word, 1)
-            new_sequence.append(tupla)
-            
-    return new_sequence
+    pass
+
 
 #
 # Escriba la función shuffle_and_sort que recibe la lista de tuplas entregada
@@ -65,8 +57,8 @@ def mapper(sequence):
 #   ]
 #
 def shuffle_and_sort(sequence):
-    sequence = sorted(sequence, key = lambda x: x[0])
-    return sequence
+    pass
+
 
 #
 # Escriba la función reducer, la cual recibe el resultado de shuffle_and_sort y
@@ -75,33 +67,16 @@ def shuffle_and_sort(sequence):
 # texto.
 #
 def reducer(sequence):
-    new_sequence = []
-    diccionario = dict()
-    
-    for key, value in sequence:
-        if key not in diccionario.keys():
-            diccionario[key] = [value]
-        else:
-            diccionario[key].append(value)
-    
-    new_sequence = list()
-    
-    for key, value in diccionario.items():
-        new_sequence.append((key, sum(value)))
-    
-    return new_sequence
+    pass
+
 
 #
 # Escriba la función create_ouptput_directory que recibe un nombre de directorio
 # y lo crea. Si el directorio existe, la función falla.
 #
-import os.path
-
 def create_ouptput_directory(output_directory):
+    pass
 
-    if os.path.isdir(output_directory):
-        raise Exception(f"The directory '{output_directory}' already exists.")
-    os.makedirs(output_directory)
 
 #
 # Escriba la función save_output, la cual almacena en un archivo de texto llamado
@@ -112,29 +87,22 @@ def create_ouptput_directory(output_directory):
 # separados por un tabulador.
 #
 def save_output(output_directory, sequence):
-    with open(output_directory + "/part 00000", "w") as file:
-        for key, value in sequence:
-            file.write(f"{key}\t{value}\n")
+    pass
+
 
 #
 # La siguiente función crea un archivo llamado _SUCCESS en el directorio
 # entregado como parámetro.
 #
 def create_marker(output_directory):
-    with open(os.path.join(output_directory, "_SUCCESS"), "w") as f:
-        f.write("")
+    pass
+
 
 #
 # Escriba la función job, la cual orquesta las funciones anteriores.
 #
 def job(input_directory, output_directory):
-    sequence = load_input("input/")
-    sequence = mapper(sequence)
-    sequence = shuffle_and_sort(sequence)
-    sequence = reducer(sequence)
-    create_ouptput_directory("output/")
-    save_output("output/", sequence)
-    create_marker("output")
+    pass
 
 
 if __name__ == "__main__":
